@@ -19,9 +19,9 @@ public class Note {
     private Date updatedAt;
     private String category;
 
+
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Note() {

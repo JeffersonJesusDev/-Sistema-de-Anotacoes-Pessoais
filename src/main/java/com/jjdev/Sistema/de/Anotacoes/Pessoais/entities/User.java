@@ -2,7 +2,6 @@ package com.jjdev.Sistema.de.Anotacoes.Pessoais.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -18,8 +17,8 @@ public class User {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Note> notes = new HashSet<>();
 
     public User() {
