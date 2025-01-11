@@ -31,9 +31,13 @@ public class UserService {
         userData.deleteById(id);
     }
 
-    public User update(Long id, User obj) {
+    public User updateUser(Long id, User obj) {
         User user = findById(id);
-        update(id, obj);
+        user.setName(obj.getName());
+        user.setEmail(obj.getEmail());
+        user.setPassword(obj.getPassword());
         return userData.save(user);
     }
+
+
 }
