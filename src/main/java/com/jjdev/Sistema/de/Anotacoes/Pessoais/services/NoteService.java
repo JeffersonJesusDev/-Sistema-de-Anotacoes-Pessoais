@@ -32,8 +32,10 @@ public class NoteService {
     }
 
     public Note updateNote(Long id, Note obj) {
-        Note note = getNoteById(id);
-        updateNote(id, obj);
+        Note note = data.findById(id).get();
+        note.setTitle(obj.getTitle());
+        note.setContent(obj.getContent());
+        note.setCategory(obj.getCategory());
         return data.save(note);
     }
 
