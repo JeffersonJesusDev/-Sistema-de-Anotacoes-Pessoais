@@ -1,5 +1,6 @@
 package com.jjdev.Sistema.de.Anotacoes.Pessoais.controllers;
 
+import com.jjdev.Sistema.de.Anotacoes.Pessoais.DTO.UserDTO;
 import com.jjdev.Sistema.de.Anotacoes.Pessoais.entities.User;
 import com.jjdev.Sistema.de.Anotacoes.Pessoais.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +16,26 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>>  getUsers() {
+    public ResponseEntity<List<UserDTO>> getUsers() {
         List<User> users = userService.findAll();
-        return ResponseEntity.ok().body(users);
+        List<UserDTO> userDTO = users.stream()
+                .map(UserDTO::new)
+                .toList();
+        return ResponseEntity.ok().body(userDTO);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         User user = userService.findById(id);
-        return ResponseEntity.ok().body(user);
+        UserDTO userDTO = new UserDTO(user);
+        return ResponseEntity.ok().body(userDTO);
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user){
+    public ResponseEntity<UserDTO> addUser(@RequestBody User user){
         userService.save(user);
-        return ResponseEntity.ok().body(user);
+        UserDTO userDTO = new UserDTO(user);
+        return ResponseEntity.ok().body(userDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -39,8 +45,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody User obj, @PathVariable Long id){
+    public ResponseEntity<UserDTO> updateUser(@RequestBody User obj, @PathVariable Long id){
         obj = userService.updateUser(id, obj);
-        return ResponseEntity.ok().body(obj);
+        UserDTO userDTO = new UserDTO(obj);
+        return ResponseEntity.ok().body(userDTO);
     }
 }
