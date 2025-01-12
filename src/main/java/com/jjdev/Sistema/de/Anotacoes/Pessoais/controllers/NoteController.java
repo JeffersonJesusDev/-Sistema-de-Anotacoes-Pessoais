@@ -1,11 +1,11 @@
 package com.jjdev.Sistema.de.Anotacoes.Pessoais.controllers;
 
+import com.jjdev.Sistema.de.Anotacoes.Pessoais.DTO.NoteDTO;
 import com.jjdev.Sistema.de.Anotacoes.Pessoais.entities.Note;
 import com.jjdev.Sistema.de.Anotacoes.Pessoais.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -16,15 +16,19 @@ public class NoteController {
     private NoteService noteService;
 
     @GetMapping
-    public ResponseEntity<List> getAllNotes(){
+    public ResponseEntity<List<NoteDTO>> getAllNotes(){
         List<Note> notes = noteService.getAll();
-        return ResponseEntity.ok().body(notes);
+        List<NoteDTO> notesDTO = notes.stream()
+                .map(NoteDTO::new)
+                .toList();
+        return ResponseEntity.ok().body(notesDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Note> getNoteById(Long id){
+    public ResponseEntity<NoteDTO> getNoteById(Long id){
         Note note = noteService.getNoteById(id);
-        return ResponseEntity.ok().body(note);
+        NoteDTO noteDTO = new NoteDTO(note);
+        return ResponseEntity.ok().body(noteDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -34,9 +38,10 @@ public class NoteController {
     }
 
     @PutMapping
-    public ResponseEntity<Note> updateNote(@RequestBody Note obj, @PathVariable Long id){
+    public ResponseEntity<NoteDTO> updateNote(@RequestBody Note obj, @PathVariable Long id){
         obj = noteService.updateNote(id, obj);
-        return ResponseEntity.ok().body(obj);
+        NoteDTO noteDTO = new NoteDTO(obj);
+        return ResponseEntity.ok().body(noteDTO);
     }
 
 }
